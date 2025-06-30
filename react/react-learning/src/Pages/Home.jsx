@@ -1,13 +1,61 @@
-import React from 'react'
-import Body from '../components/Body'
-const Home = () => {
-  return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50">
-      <h1 className="text-4xl font-bold text-blue-700 mb-4">Welcome to MyWebsite!</h1>
-      <p className="text-lg text-gray-700 mb-8">Explore our features and learn more about us.</p>
-      <Body />
-    </div>
-  );
-}
+import requests from "./netflixaApi";
+import { useState, useEffect } from "react";
+import axios from "axios";
 
-export default Home
+console.log(requests);
+const Home = () => {
+  const[netflixData,setNetflixData]=useState([]);
+  console.log(netflixData);
+
+  const getData = () =>{
+    console.log("clicked");
+    
+
+  axios
+  .get(requests.requestUpcoming)
+  .then((res) =>setNetflixData(res.data.results))
+  .catch((err) => console.log(err));
+  };
+
+   useEffect(()=>{
+    getData();
+   },[])
+
+
+
+  return  (
+    <>
+    <button onClick={getData}
+    className="bg-amber-900 text-white p-2 roundes-2x2">
+       getData
+    </button>
+    {netflixData.map((elen)=>{
+      console.log(elen);
+      return(
+        <>
+        <div>
+          <img
+          className="w-full"
+          src ={`https://image.tmdb.org/t/p/w500/${elen.backdrop_path}`} 
+          alt="image"
+          
+          />
+        
+        </div>
+        
+        
+        </>
+      )
+
+    })}
+   
+    
+
+    
+
+    </>
+  )
+
+};
+
+export default Home;
